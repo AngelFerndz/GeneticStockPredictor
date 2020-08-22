@@ -81,26 +81,32 @@ public class Main {
             counter += m.getTotalValue(currentPrice);
         }
 
-
         double average = counter / members.size();
         modify = new ArrayList<>();
         double best = 0;
+        double worst = 999999999;
 
-        int top = 0;
         for(Member m : members) {
-            if(m.getTotalValue(currentPrice) > average){
-                top++;
-                if(m.getTotalValue(currentPrice) > best){
-                    best = m.getTotalValue(currentPrice);
+            double totalValue = m.getTotalValue(currentPrice);
+
+            if(totalValue> average){
+                if(totalValue > best){
+                    best = totalValue;
                 }
-                System.out.print(m.id + ", ");
+                //System.out.print(m.id + ", ");
             } else {
+                if(totalValue < worst){
+                    worst = totalValue;
+                }
                 modify.add(m);
             }
         }
 
         System.out.println();
-        System.out.println("Above Average: " + top + ", Average: " + average + ", Best: " + best);
+        System.out.println("Modified      : " + modify.size() + "/" + members.size());
+        System.out.println("Average Value : " + average);
+        System.out.println("Best Member   : " + best);
+        System.out.println("Worst Member  : " + worst);
     }
 
     private static void repopulate() {
