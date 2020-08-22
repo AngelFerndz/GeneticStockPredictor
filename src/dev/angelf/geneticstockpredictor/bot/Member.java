@@ -4,9 +4,10 @@ import java.util.Random;
 
 public class Member {
 
-    int shares;
-    double money;
-    double boughtPrice;
+    public int id;
+    public int shares;
+    public double money;
+    private double boughtPrice;
 
     // Genes
     float stopLoss;
@@ -14,12 +15,13 @@ public class Member {
     float hold;
     float avgRange;
 
-    public Member(double Money) {
+    public Member(int ID, double money) {
         shares = 0;
-        money = Money;
+        this.id = ID;
+        this.money = money;
     }
 
-    public void initialize(){
+    public void initialize() {
         Random random = new Random();
         stopLoss = random.nextFloat();
         observationLength = random.nextFloat();
@@ -27,10 +29,10 @@ public class Member {
         avgRange = random.nextFloat();
     }
 
-    public void mutate(){
+    public void mutate() {
         Random random = new Random();
         int i = random.nextInt(4);
-        switch (i){
+        switch (i) {
             case 0:
                 stopLoss = random.nextFloat();
                 break;
@@ -46,10 +48,10 @@ public class Member {
         }
     }
 
-    public void merge(Member member){
+    public void merge(Member member) {
         Random random = new Random();
         int i = random.nextInt(3);
-        switch (i){
+        switch (i) {
             case 0:
                 stopLoss = member.stopLoss;
                 break;
@@ -62,34 +64,46 @@ public class Member {
         }
     }
 
-    public void run(double[] prices){
+    public void run(double[] prices) {
         double currentPrice = prices[prices.length - 1];
         double average = getAverage(prices);
 
-        if(currentPrice - boughtPrice > boughtPrice * stopLoss){
-            // sell at stop loss
-            sell(currentPrice);
+        if(shares > 0) {
+            if (currentPrice - boughtPrice > boughtPrice * stopLoss) {
+                // sell at stop loss
+                sell(currentPrice);
+                //System.out.println("Sell: Stop Loss " + currentPrice + " / " + boughtPrice);
+            }
+
+            if (getAverageTop(average) < currentPrice && currentPrice > boughtPrice) {
+                // sell at a above average
+                sell(currentPrice);
+                //System.out.println("Sell: Gains " + currentPrice + " / " + boughtPrice);
+            }
         }
 
-        if (getAverageTop(average) < currentPrice && currentPrice > boughtPrice) {
-            // sell at a above average
-            sell(currentPrice);
-        }
-
-        if(getAverageBottom(average) < currentPrice) {
+        if (getAverageBottom(average) < currentPrice) {
             buy(currentPrice);
+            //System.out.println("Buy: " + currentPrice);
         }
     }
 
-    private void sell(double currentPrice){
-        while (shares > 0) {
+    public double getTotalValue(double currentPrice){
+        double value = money;
+        value += shares * currentPrice;
+        return value;
+    }
+
+    private void sell(double currentPrice) {
+        if (shares > 0) {
             money += currentPrice;
             shares--;
         }
     }
 
-    private void buy(double currentPrice){
-        while (money > currentPrice) {
+    private void buy(double currentPrice) {
+        if (money > currentPrice) {
+            boughtPrice = currentPrice;
             money -= currentPrice;
             shares++;
         }
@@ -101,19 +115,31 @@ public class Member {
 
         // Calculate Average
         double counter = 0;
-        for (int i = currentTime; i > 0; i++) {
+        for (int i = currentTime; i > 0; i--) {
             counter += prices[i];
         }
 
         return counter / observationTime;
     }
 
-    private double getAverageTop(double average){
+    private double getAverageTop(double average) {
         return (average * avgRange) + average;
     }
 
-    private double getAverageBottom(double average){
+    private double getAverageBottom(double average) {
         return (average * avgRange) - average;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" + shares +
+                ", " + money +
+                ", " + boughtPrice +
+                ", " + stopLoss +
+                ", " + observationLength +
+                ", " + hold +
+                ", " + avgRange +
+                '}';
     }
 
 }
