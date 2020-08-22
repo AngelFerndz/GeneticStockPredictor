@@ -96,7 +96,7 @@ public class Member {
 
     private void sell(double currentPrice) {
         if (shares > 0) {
-            money += currentPrice;
+            money += currentPrice; // excluding 10% taxes
             shares--;
         }
     }

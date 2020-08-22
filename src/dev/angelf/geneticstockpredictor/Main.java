@@ -12,20 +12,35 @@ public class Main {
     static ArrayList<Member> modify;
 
     public static void main(String[] args) {
-        initialize(100, 5.00);
+        double cash = 500;
 
-        for(int i = 0; i < 100; i++) {
-            double[] prices = generatePrices(1.00, 100);
-            double currentPrice = prices[prices.length - 1];
+        initialize(100, cash);
+        double[] prices = generatePrices(1.00, 365);
+        double currentPrice = prices[prices.length - 1];
+
+        int trainingCycles = 10;
+
+        // Continuous run
+        for(int i = 0; i < trainingCycles; i++) {
             runPopulation(prices);
-            testFitness(currentPrice);
+            testFitness(currentPrice, cash);
             repopulate();
-            refreshMembers(5.00);
+            //refreshMembers(5.00);
+
+            currentPrice = prices[prices.length - 1];
+            prices = generatePrices(currentPrice, 100);
         }
 
     }
 
-    private static void initialize(int amount, double money) {
+    private static void initialize(int amount, double cash) {
+        System.out.println("Genetic Stock Predictor");
+        System.out.println("By angelf.dev | Angel Fernandez");
+        System.out.println("Generating [" + amount + "] Members." );
+        System.out.println("Initial Investment: " + cash);
+
+        double money = cash / amount;
+
         members = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             Member member = new Member(i, money);
@@ -74,7 +89,7 @@ public class Main {
         }
     }
 
-    private static void testFitness(double currentPrice){
+    private static void testFitness(double currentPrice, double cash){
         double counter = 0;
 
         for(Member m : members) {
@@ -105,14 +120,28 @@ public class Main {
         System.out.println();
         System.out.println("Modified      : " + modify.size() + "/" + members.size());
         System.out.println("Average Value : " + average);
+        System.out.println("Total Value   : " + counter);
         System.out.println("Best Member   : " + best);
         System.out.println("Worst Member  : " + worst);
+        System.out.println("Gains         : " + (counter - cash));
+        System.out.println("10% Taxes     : " + (counter - cash) * .1);
     }
 
     private static void repopulate() {
-        for(Member m : modify){
-            m.mutate();
+        Random random = new Random();
+
+        if (random.nextBoolean()) {
+            for(Member m : modify){
+                m.mutate();
+            }
+        } else {
+            for (Member a : modify){
+                for (Member b : members){
+                    a.merge(b);
+                }
+            }
         }
+
     }
 
 }
