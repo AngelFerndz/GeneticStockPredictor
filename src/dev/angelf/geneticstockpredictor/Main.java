@@ -5,20 +5,28 @@ import dev.angelf.geneticstockpredictor.bot.Member;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
 
     static ArrayList<Member> members;
     static ArrayList<Member> modify;
 
-    public static void main(String[] args) {
-        double cash = 500;
+    static Scanner scanner;
 
-        initialize(100, cash);
+    public static void main(String[] args) {
+        scanner = new Scanner(System.in);
+
+        System.out.print("Enter Money Amount: ");
+        double cash = scanner.nextInt();
+        System.out.print("Enter Amount of Bots: ");
+        int amount = scanner.nextInt();
+        System.out.print("Enter Amount of Training Cycles: ");
+        int trainingCycles = scanner.nextInt();
+
+        initialize(amount, cash);
         double[] prices = generatePrices(1.00, 365);
         double currentPrice = prices[prices.length - 1];
-
-        int trainingCycles = 10;
 
         // Continuous run
         for(int i = 0; i < trainingCycles; i++) {
@@ -30,6 +38,7 @@ public class Main {
             currentPrice = prices[prices.length - 1];
             prices = generatePrices(currentPrice, 100);
         }
+
 
     }
 
