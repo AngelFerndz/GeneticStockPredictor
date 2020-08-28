@@ -15,6 +15,8 @@ public class Main {
     static Scanner scanner;
 
     public static void main(String[] args) {
+        // push attempt
+
         scanner = new Scanner(System.in);
 
         System.out.print("Enter Money Amount: ");
