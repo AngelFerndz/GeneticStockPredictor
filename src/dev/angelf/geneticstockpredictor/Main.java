@@ -1,6 +1,6 @@
 package dev.angelf.geneticstockpredictor;
 
-import dev.angelf.geneticstockpredictor.bot.Member;
+import dev.angelf.geneticstockpredictor.bot.Bot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 public class Main {
 
-    static ArrayList<Member> members;
-    static ArrayList<Member> modify;
+    static ArrayList<Bot> members;
+    static ArrayList<Bot> modify;
 
     static Scanner scanner;
 
@@ -52,14 +52,14 @@ public class Main {
 
         members = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
-            Member member = new Member(i, money);
+            Bot member = new Bot(i, money);
             member.initialize();
             members.add(member);
         }
     }
 
     private static void refreshMembers(double money){
-        for(Member m : members){
+        for(Bot m : members){
             m.money = money;
             m.shares = 0;
         }
@@ -92,7 +92,7 @@ public class Main {
     private static void runPopulation(double[] prices){
         for(int i = 0; i < prices.length - 1; i++){
             double[] temp = Arrays.copyOfRange(prices, 0, i + 1);
-            for(Member m : members){
+            for(Bot m : members){
                 m.run(temp);
             }
         }
@@ -101,7 +101,7 @@ public class Main {
     private static void testFitness(double currentPrice, double cash){
         double counter = 0;
 
-        for(Member m : members) {
+        for(Bot m : members) {
             counter += m.getTotalValue(currentPrice);
         }
 
@@ -110,7 +110,7 @@ public class Main {
         double best = 0;
         double worst = 999999999;
 
-        for(Member m : members) {
+        for(Bot m : members) {
             double totalValue = m.getTotalValue(currentPrice);
 
             if(totalValue> average){
@@ -140,12 +140,12 @@ public class Main {
         Random random = new Random();
 
         if (random.nextBoolean()) {
-            for(Member m : modify){
+            for(Bot m : modify){
                 m.mutate();
             }
         } else {
-            for (Member a : modify){
-                for (Member b : members){
+            for (Bot a : modify){
+                for (Bot b : members){
                     a.merge(b);
                 }
             }

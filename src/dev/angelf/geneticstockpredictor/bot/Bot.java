@@ -2,7 +2,7 @@ package dev.angelf.geneticstockpredictor.bot;
 
 import java.util.Random;
 
-public class Member {
+public class Bot {
 
     public int id;
     public int shares;
@@ -15,7 +15,7 @@ public class Member {
     float hold;
     float avgRange;
 
-    public Member(int ID, double money) {
+    public Bot(int ID, double money) {
         shares = 0;
         this.id = ID;
         this.money = money;
@@ -48,7 +48,7 @@ public class Member {
         }
     }
 
-    public void merge(Member member) {
+    public void merge(Bot member) {
         Random random = new Random();
         int i = random.nextInt(3);
         switch (i) {
