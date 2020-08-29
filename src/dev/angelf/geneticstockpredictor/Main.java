@@ -8,7 +8,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-
     static ArrayList<Bot> members;
     static ArrayList<Bot> modify;
 
