@@ -43,13 +43,19 @@ public class Main {
     }
 
     private static void initialize(int amount, double cash) {
+        printHead(amount, cash);
+        double money = cash / amount;
+        generateMembers(amount, money);
+    }
+
+    private static void printHead(int amount, double cash){
         System.out.println("Genetic Stock Predictor");
         System.out.println("By angelf.dev | Angel Fernandez");
         System.out.println("Generating [" + amount + "] Members." );
         System.out.println("Initial Investment: " + cash);
+    }
 
-        double money = cash / amount;
-
+    private static void generateMembers(int amount, double money){
         members = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             Bot member = new Bot(i, money);
