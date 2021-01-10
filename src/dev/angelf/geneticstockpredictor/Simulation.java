@@ -7,65 +7,38 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Main {
-    static ArrayList<Bot> members;
-    static ArrayList<Bot> modify;
-    static Scanner scanner;
+public class Simulation {
+    private ArrayList<Bot> members;
+    private ArrayList<Bot> modify;
+    private Scanner scanner;
 
-    static int amount;
-    static double cash;
-    static int trainingCycles;
-
-    /*
-     * TODO try catch inputs and provide clear output
-     * */
-
-    public static void main(String[] args) {
-
+    public Simulation (){
         scanner = new Scanner(System.in);
-        print_head();
-        capture_inputs();
-
-        initialize(amount, cash);
-
-        double[] prices = generate_prices(1.00, 365);
-        double currentPrice = prices[prices.length - 1];
-
-        // Continuous run
-        for (int i = 0; i < trainingCycles; i++) {
-            run_population(prices);
-            test_fitness(currentPrice, cash);
-            repopulate();
-
-            currentPrice = prices[prices.length - 1];
-            prices = generate_prices(currentPrice, 100);
-        }
-
     }
 
-    private static void initialize(int amount, double cash) {
+    public void initialize(int amount, double cash) {
+        printHead(amount, cash);
         double money = cash / amount;
-        generate_members(amount, money);
-        System.out.println("Generating [" + amount + "] Members.");
+        generateMembers(amount, money);
+    }
+
+    public void captureInputs(){
+        System.out.print("Enter Money Amount: ");
+        double cash = scanner.nextInt();
+        System.out.print("Enter Amount of Bots: ");
+        int amount = scanner.nextInt();
+        System.out.print("Enter Amount of Training Cycles: ");
+        int trainingCycles = scanner.nextInt();
+    }
+
+    public void printHead(int amount, double cash){
+        System.out.println("Genetic Stock Predictor");
+        System.out.println("By angelf.dev | Angel Fernandez");
+        System.out.println("Generating [" + amount + "] Members." );
         System.out.println("Initial Investment: " + cash);
     }
 
-    private static void capture_inputs() {
-        System.out.print("Enter Money Amount: ");
-        cash = scanner.nextInt();
-        System.out.print("Enter Amount of Bots: ");
-        amount = scanner.nextInt();
-        System.out.print("Enter Amount of Training Cycles: ");
-        trainingCycles = scanner.nextInt();
-    }
-
-    private static void print_head() {
-        System.out.println("Genetic Stock Predictor");
-        System.out.println("By angelf.dev | Angel Fernandez");
-
-    }
-
-    private static void generate_members(int amount, double money) {
+    public void generateMembers(int amount, double money){
         members = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             Bot member = new Bot(i, money);
@@ -74,29 +47,29 @@ public class Main {
         }
     }
 
-    private static void refresh_members(double money) {
-        for (Bot m : members) {
+    public void refreshMembers(double money){
+        for(Bot m : members){
             m.money = money;
             m.shares = 0;
         }
     }
 
-    private static double[] generate_prices(double initialPrice, int length) {
+    public double[] generatePrices(double initialPrice, int length){
         Random random = new Random();
         double[] prices = new double[length];
         double currentPrice = initialPrice;
 
         // Generate values
-        for (int i = 0; i < prices.length; i++) {
-            if (currentPrice < 1) {
+        for(int i = 0; i < prices.length; i++){
+            if(currentPrice < 1){
                 currentPrice += random.nextFloat();
-            } else if (currentPrice > 300) {
+            } else if (currentPrice > 300){
                 currentPrice -= random.nextFloat();
             } else {
-                if (random.nextInt(100) < 54) {
-                    currentPrice += random.nextFloat();
+                if(random.nextInt(100) < 54){
+                    currentPrice  += random.nextFloat();
                 } else {
-                    currentPrice -= random.nextFloat();
+                    currentPrice -=  random.nextFloat();
                 }
             }
             prices[i] = currentPrice;
@@ -105,19 +78,19 @@ public class Main {
         return prices;
     }
 
-    private static void run_population(double[] prices) {
-        for (int i = 0; i < prices.length - 1; i++) {
+    public void runPopulation(double[] prices){
+        for(int i = 0; i < prices.length - 1; i++){
             double[] temp = Arrays.copyOfRange(prices, 0, i + 1);
-            for (Bot m : members) {
+            for(Bot m : members){
                 m.run(temp);
             }
         }
     }
 
-    private static void test_fitness(double currentPrice, double cash) {
+    public void testFitness(double currentPrice, double cash){
         double counter = 0;
 
-        for (Bot m : members) {
+        for(Bot m : members) {
             counter += m.getTotalValue(currentPrice);
         }
 
@@ -126,16 +99,16 @@ public class Main {
         double best = 0;
         double worst = 999999999;
 
-        for (Bot m : members) {
+        for(Bot m : members) {
             double totalValue = m.getTotalValue(currentPrice);
 
-            if (totalValue > average) {
-                if (totalValue > best) {
+            if(totalValue> average){
+                if(totalValue > best){
                     best = totalValue;
                 }
                 //System.out.print(m.id + ", ");
             } else {
-                if (totalValue < worst) {
+                if(totalValue < worst){
                     worst = totalValue;
                 }
                 modify.add(m);
@@ -152,21 +125,20 @@ public class Main {
         System.out.println("10% Taxes     : " + (counter - cash) * .1);
     }
 
-    private static void repopulate() {
+    public void repopulate() {
         Random random = new Random();
 
         if (random.nextBoolean()) {
-            for (Bot m : modify) {
+            for(Bot m : modify){
                 m.mutate();
             }
         } else {
-            for (Bot a : modify) {
-                for (Bot b : members) {
+            for (Bot a : modify){
+                for (Bot b : members){
                     a.merge(b);
                 }
             }
         }
 
     }
-
 }
