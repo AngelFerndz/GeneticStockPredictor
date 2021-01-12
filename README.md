@@ -1,5 +1,6 @@
 # GeneticStockTrader
 Uses a genetic algorithm to create trading bots.
+
 Command line program.
 
 - Enter the initial investment.
