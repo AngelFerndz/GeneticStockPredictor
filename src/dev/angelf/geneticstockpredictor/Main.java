@@ -23,11 +23,37 @@ public class Main {
     public static void main(String[] args) {
 
         scanner = new Scanner(System.in);
+
         print_head();
         capture_inputs();
+        initialize();
+        run();
 
-        initialize(amount, cash);
+    }
 
+    private static void print_head() {
+        System.out.println("Genetic Stock Predictor");
+        System.out.println("By angelf.dev | Angel Fernandez");
+
+    }
+
+    private static void capture_inputs() {
+        System.out.print("Enter Money Amount: ");
+        cash = scanner.nextInt();
+        System.out.print("Enter Amount of Bots: ");
+        amount = scanner.nextInt();
+        System.out.print("Enter Amount of Training Cycles: ");
+        trainingCycles = scanner.nextInt();
+    }
+
+    private static void initialize() {
+        double money = cash / amount;
+        generate_members(amount, money);
+        System.out.println("Generating [" + amount + "] Members.");
+        System.out.println("Initial Investment: " + cash);
+    }
+
+    private static void run() {
         double[] prices = generate_prices(1.00, 365);
         double currentPrice = prices[prices.length - 1];
 
@@ -40,29 +66,6 @@ public class Main {
             currentPrice = prices[prices.length - 1];
             prices = generate_prices(currentPrice, 100);
         }
-
-    }
-
-    private static void initialize(int amount, double cash) {
-        double money = cash / amount;
-        generate_members(amount, money);
-        System.out.println("Generating [" + amount + "] Members.");
-        System.out.println("Initial Investment: " + cash);
-    }
-
-    private static void capture_inputs() {
-        System.out.print("Enter Money Amount: ");
-        cash = scanner.nextInt();
-        System.out.print("Enter Amount of Bots: ");
-        amount = scanner.nextInt();
-        System.out.print("Enter Amount of Training Cycles: ");
-        trainingCycles = scanner.nextInt();
-    }
-
-    private static void print_head() {
-        System.out.println("Genetic Stock Predictor");
-        System.out.println("By angelf.dev | Angel Fernandez");
-
     }
 
     private static void generate_members(int amount, double money) {
