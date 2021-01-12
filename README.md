@@ -7,5 +7,7 @@ Command line program.
 - Enter the amount of cycles for those bots to be trained.
 
 Generates simulated market prices derived from analyzing historic data of S&P500, DOW and NASDAQ.
+
 The bots use 4 "genes" or traits to make day trades.
+
 The genetic algorithm reproduces by means of merging and mutating those most fit.
