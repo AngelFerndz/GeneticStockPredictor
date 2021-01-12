@@ -50,7 +50,7 @@ public class Bot {
 
     public void merge(Bot member) {
         Random random = new Random();
-        int i = random.nextInt(3);
+        int i = random.nextInt(4);
         switch (i) {
             case 0:
                 stopLoss = member.stopLoss;
@@ -60,6 +60,9 @@ public class Bot {
                 break;
             case 2:
                 hold = member.hold;
+                break;
+            case 3:
+                avgRange = member.avgRange;
                 break;
         }
     }

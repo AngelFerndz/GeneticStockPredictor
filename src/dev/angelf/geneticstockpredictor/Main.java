@@ -18,6 +18,7 @@ public class Main {
 
     /*
      * TODO try catch inputs and provide clear output
+     *  Fix changes in price to reflect real world data
      * */
 
     public static void main(String[] args) {
@@ -34,7 +35,6 @@ public class Main {
     private static void print_head() {
         System.out.println("Genetic Stock Predictor");
         System.out.println("By angelf.dev | Angel Fernandez");
-
     }
 
     private static void capture_inputs() {
@@ -89,13 +89,20 @@ public class Main {
         double[] prices = new double[length];
         double currentPrice = initialPrice;
 
+        // minimum and maximum prices
+        double min = 1;
+        double max = 300;
+
         // Generate values
         for (int i = 0; i < prices.length; i++) {
-            if (currentPrice < 1) {
+            if (currentPrice < min) {
+                // avoid the price going beneath the min
                 currentPrice += random.nextFloat();
-            } else if (currentPrice > 300) {
+            } else if (currentPrice > max) {
+                // avoid the price going above the max
                 currentPrice -= random.nextFloat();
             } else {
+                // 54% upward trend based on historical data from S&P500, DOW & NASDAQ
                 if (random.nextInt(100) < 54) {
                     currentPrice += random.nextFloat();
                 } else {
