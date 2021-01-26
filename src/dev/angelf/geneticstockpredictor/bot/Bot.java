@@ -7,13 +7,12 @@ public class Bot {
     public int id;
     public int shares;
     public double money;
-    private double boughtPrice;
-
     // Genes
     float stopLoss;
     float observationLength;
     float hold;
     float avgRange;
+    private double boughtPrice;
 
     public Bot(int ID, double money) {
         shares = 0;
@@ -71,7 +70,7 @@ public class Bot {
         double currentPrice = prices[prices.length - 1];
         double average = getAverage(prices);
 
-        if(shares > 0) {
+        if (shares > 0) {
             if (currentPrice - boughtPrice > boughtPrice * stopLoss) {
                 // sell at stop loss
                 sell(currentPrice);
@@ -91,7 +90,7 @@ public class Bot {
         }
     }
 
-    public double getTotalValue(double currentPrice){
+    public double getTotalValue(double currentPrice) {
         double value = money;
         value += shares * currentPrice;
         return value;

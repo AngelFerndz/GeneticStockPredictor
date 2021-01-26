@@ -15,6 +15,8 @@ public class Main {
     static int amount;
     static double cash;
     static int trainingCycles;
+    static int minPrice;
+    static int maxPrice;
 
     /*
      * TODO try catch inputs and provide clear output
@@ -22,7 +24,7 @@ public class Main {
      * */
 
     public static void main(String[] args) {
-
+        minPrice = 0;
         scanner = new Scanner(System.in);
 
         print_head();
@@ -44,6 +46,8 @@ public class Main {
         amount = scanner.nextInt();
         System.out.print("Enter Amount of Training Cycles: ");
         trainingCycles = scanner.nextInt();
+        System.out.print("Enter Max Price Market can reach: ");
+        maxPrice = scanner.nextInt();
     }
 
     private static void initialize() {
@@ -89,16 +93,12 @@ public class Main {
         double[] prices = new double[length];
         double currentPrice = initialPrice;
 
-        // minimum and maximum prices
-        double min = 1;
-        double max = 300;
-
         // Generate values
         for (int i = 0; i < prices.length; i++) {
-            if (currentPrice < min) {
+            if (currentPrice < minPrice) {
                 // avoid the price going beneath the min
                 currentPrice += random.nextFloat();
-            } else if (currentPrice > max) {
+            } else if (currentPrice > maxPrice) {
                 // avoid the price going above the max
                 currentPrice -= random.nextFloat();
             } else {
